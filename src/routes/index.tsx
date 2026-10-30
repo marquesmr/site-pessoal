@@ -24,22 +24,24 @@ const principles = [
 
 function Home() {
   const { projects } = useProjects();
+  const visible = projects.filter((project) => !project.hidden);
 
   return (
     <SiteFrame>
       <main>
         <section className="mx-auto grid max-w-6xl items-end gap-10 px-5 pb-8 pt-10 lg:grid-cols-12 lg:pt-16">
           <div className="lg:col-span-7">
-            <p className="text-xs tracking-[0.28em] text-mute uppercase">Mário Campos · disponível</p>
-            <h1 className="mt-5 font-serif text-6xl leading-[0.86] tracking-tight text-balance sm:text-7xl lg:text-8xl">
-              Carlos
-              <br />
-              Marques
-            </h1>
-            <p className="mt-6 max-w-md text-lg leading-relaxed text-pretty text-mute">
-              Programador e designer gráfico. Trabalho entre a marca e a interface — identidades, sites e
-              produtos com uma linguagem própria: clara, tátil e contemporânea.
-            </p>
+            <div className="grid w-max max-w-full grid-cols-[min-content]">
+              <h1 className="font-serif text-6xl leading-[0.86] tracking-tight sm:text-7xl lg:text-8xl">
+                Carlos
+                <br />
+                Marques
+              </h1>
+              <p className="mt-5 min-w-0 text-left text-base leading-snug text-mute sm:mt-6 sm:text-lg">
+                Programador e designer gráfico. Trabalho entre a marca e a interface — identidades, sites e
+                produtos com uma linguagem própria: clara, tátil e contemporânea.
+              </p>
+            </div>
           </div>
           <div className="lg:col-span-5">
             <figure>
@@ -76,7 +78,7 @@ function Home() {
               <p className="hidden text-sm text-mute sm:block">Seleção recente</p>
             </div>
             <ol className="mt-4">
-              {projects.map((project, index) => (
+              {visible.map((project, index) => (
                 <li key={project.id} className="border-b border-line py-10 lg:py-14">
                   <article className="grid items-start gap-6 lg:grid-cols-12 lg:gap-10">
                     <div className={index % 2 === 1 ? "lg:order-2 lg:col-span-5" : "lg:col-span-4"}>

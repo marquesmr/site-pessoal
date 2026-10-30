@@ -9,6 +9,7 @@ export type Project = {
   role: string;
   image: string;
   link: string;
+  hidden: boolean;
 };
 
 const KEY = "cm-portfolio-v1";
@@ -25,6 +26,7 @@ export const seedProjects: Project[] = [
     role: "Direção de arte e embalagem",
     image: "/work/serra.jpg",
     link: "",
+    hidden: false,
   },
   {
     id: "atlas",
@@ -36,6 +38,7 @@ export const seedProjects: Project[] = [
     role: "Interface e desenvolvimento",
     image: "/work/atlas.jpg",
     link: "",
+    hidden: false,
   },
   {
     id: "barro",
@@ -47,6 +50,7 @@ export const seedProjects: Project[] = [
     role: "Identidade e direção de foto",
     image: "/work/barro.jpg",
     link: "",
+    hidden: false,
   },
   {
     id: "arco",
@@ -58,6 +62,7 @@ export const seedProjects: Project[] = [
     role: "Direção de arte",
     image: "/work/poster.jpg",
     link: "",
+    hidden: false,
   },
   {
     id: "norte",
@@ -69,6 +74,7 @@ export const seedProjects: Project[] = [
     role: "Design e front-end",
     image: "/work/norte.jpg",
     link: "",
+    hidden: false,
   },
 ];
 
@@ -83,7 +89,8 @@ function isProject(value: unknown): value is Project {
     typeof p.summary === "string" &&
     typeof p.role === "string" &&
     typeof p.image === "string" &&
-    typeof p.link === "string"
+    typeof p.link === "string" &&
+    (p.hidden === undefined || typeof p.hidden === "boolean")
   );
 }
 
@@ -94,7 +101,10 @@ export function loadProjects(): Project[] {
     if (!raw) return seedProjects;
     const parsed: unknown = JSON.parse(raw);
     if (!Array.isArray(parsed) || parsed.length === 0) return seedProjects;
-    const projects = parsed.filter(isProject);
+    const projects = parsed.filter(isProject).map((project) => ({
+      ...project,
+      hidden: project.hidden === true,
+    }));
     return projects.length > 0 ? projects : seedProjects;
   } catch {
     return seedProjects;

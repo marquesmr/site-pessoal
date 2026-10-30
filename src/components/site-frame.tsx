@@ -15,27 +15,14 @@ export function SiteFrame({ children }: { children: ReactNode }) {
           <Link to="/" className="font-serif text-lg leading-none tracking-tight">
             Carlos Marques
           </Link>
-          <nav className="hidden items-center gap-6 text-sm sm:flex">
+          <nav className="flex items-center gap-5 text-sm sm:gap-6">
             {links.map((item) => (
               <a key={item.href} href={item.href} className="text-mute hover:text-ink">
                 {item.label}
               </a>
             ))}
           </nav>
-          <Link
-            to="/estudio"
-            className="inline-flex h-11 items-center border border-ink px-4 text-sm hover:bg-ink hover:text-paper"
-          >
-            Estúdio
-          </Link>
         </div>
-        <nav className="mx-auto flex max-w-6xl gap-5 border-t border-line px-5 py-2.5 text-sm sm:hidden">
-          {links.map((item) => (
-            <a key={item.href} href={item.href} className="text-mute">
-              {item.label}
-            </a>
-          ))}
-        </nav>
       </header>
       {children}
       <footer className="border-t border-line">
