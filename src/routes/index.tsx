@@ -37,7 +37,7 @@ function Home() {
                 <br />
                 Marques
               </h1>
-              <p className="mt-5 min-w-0 text-left text-base leading-snug text-mute sm:mt-6 sm:text-lg">
+              <p className="mt-5 min-w-0 text-justify text-base leading-snug text-mute sm:mt-6 sm:text-lg">
                 Programador e designer gráfico. Trabalho entre a marca e a interface — identidades, sites e
                 produtos com uma linguagem própria: clara, tátil e contemporânea.
               </p>
@@ -91,7 +91,7 @@ function Home() {
                       <p className="mt-3 text-sm text-mute">
                         {project.discipline} · {project.year}
                       </p>
-                      <p className="mt-4 max-w-sm leading-relaxed text-pretty">{project.summary}</p>
+                      <p className="mt-4 max-w-sm text-justify leading-relaxed">{project.summary}</p>
                       <p className="mt-4 text-sm text-mute">{project.role}</p>
                       {project.link ? (
                         <a
