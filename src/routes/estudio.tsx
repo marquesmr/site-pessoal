@@ -254,7 +254,7 @@ function Editor() {
               className="mt-3 block w-full text-sm text-mute file:mr-4 file:h-11 file:border-0 file:bg-ink file:px-4 file:text-paper"
             />
             <p className="text-sm leading-relaxed text-mute">
-              No site a foto entra em 4:3, cerca de 730 × 550 px no computador. Envie 1600 × 1200 px para ficar
+              No site a foto entra em 4:3, cerca de 540 × 400 px no computador. Envie 1600 × 1200 px para ficar
               nítida. O que fugir dessa proporção é cortado.
             </p>
           </Field>

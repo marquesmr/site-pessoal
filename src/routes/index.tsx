@@ -81,7 +81,7 @@ function Home() {
               {visible.map((project, index) => (
                 <li key={project.id} className="border-b border-line py-10 lg:py-14">
                   <article className="grid items-start gap-6 lg:grid-cols-12 lg:gap-10">
-                    <div className={index % 2 === 1 ? "lg:order-2 lg:col-span-5" : "lg:col-span-4"}>
+                    <div className={index % 2 === 1 ? "lg:order-2 lg:col-span-6" : "lg:col-span-6"}>
                       <p className="font-serif text-sm text-oxide tabular-nums">
                         {String(index + 1).padStart(2, "0")}
                       </p>
@@ -91,7 +91,7 @@ function Home() {
                       <p className="mt-3 text-sm text-mute">
                         {project.discipline} · {project.year}
                       </p>
-                      <p className="mt-4 max-w-sm text-justify leading-relaxed">{project.summary}</p>
+                      <p className="mt-4 text-justify leading-relaxed">{project.summary}</p>
                       <p className="mt-4 text-sm text-mute">{project.role}</p>
                       {project.link ? (
                         <a
@@ -104,7 +104,7 @@ function Home() {
                         </a>
                       ) : null}
                     </div>
-                    <figure className={index % 2 === 1 ? "lg:order-1 lg:col-span-7" : "lg:col-span-8"}>
+                    <figure className={index % 2 === 1 ? "lg:order-1 lg:col-span-6" : "lg:col-span-6"}>
                       <div className="overflow-hidden bg-paper-2">
                         <img
                           src={project.image}
