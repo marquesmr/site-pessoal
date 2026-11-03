@@ -95,7 +95,7 @@ function Lock({ onOpen }: { onOpen: () => void }) {
 }
 
 function Editor() {
-  const { projects, update } = useProjects();
+  const { projects, update, ready } = useProjects({ migrateLocal: true });
   const [draft, setDraft] = useState<Draft>(emptyDraft);
   const [editing, setEditing] = useState<string | null>(null);
   const [notice, setNotice] = useState("");
@@ -106,23 +106,40 @@ function Editor() {
 
   function onFile(file: File | undefined) {
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") setField("image", reader.result);
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const max = 1600;
+      const scale = Math.min(1, max / Math.max(img.width, img.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1, Math.round(img.width * scale));
+      canvas.height = Math.max(1, Math.round(img.height * scale));
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      setField("image", canvas.toDataURL("image/jpeg", 0.82));
+      URL.revokeObjectURL(url);
     };
-    reader.readAsDataURL(file);
+    img.src = url;
+  }
+
+  async function commit(next: Project[], message: string) {
+    try {
+      await update(next);
+      setNotice(message);
+    } catch {
+      setNotice("Não consegui publicar agora. Tente de novo.");
+    }
   }
 
   function save(event: FormEvent) {
     event.preventDefault();
     const image = draft.image.trim() || "/work/mesa.jpg";
     if (editing) {
-      update(
-        projects.map((project) =>
-          project.id === editing ? { ...project, ...draft, image } : project,
-        ),
+      void commit(
+        projects.map((project) => (project.id === editing ? { ...project, ...draft, image } : project)),
+        "Projeto atualizado no site.",
       );
-      setNotice("Projeto atualizado.");
     } else {
       const project: Project = {
         id: crypto.randomUUID(),
@@ -130,8 +147,7 @@ function Editor() {
         image,
         hidden: false,
       };
-      update([project, ...projects]);
-      setNotice("Projeto publicado no portfólio.");
+      void commit([project, ...projects], "Projeto publicado no site.");
     }
     setDraft(emptyDraft);
     setEditing(null);
@@ -152,7 +168,10 @@ function Editor() {
   }
 
   function remove(id: string) {
-    update(projects.filter((project) => project.id !== id));
+    void commit(
+      projects.filter((project) => project.id !== id),
+      "Trabalho removido do site.",
+    );
     if (editing === id) {
       setEditing(null);
       setDraft(emptyDraft);
@@ -160,7 +179,11 @@ function Editor() {
   }
 
   function toggleHidden(id: string) {
-    update(projects.map((project) => (project.id === id ? { ...project, hidden: !project.hidden } : project)));
+    const project = projects.find((item) => item.id === id);
+    void commit(
+      projects.map((item) => (item.id === id ? { ...item, hidden: !item.hidden } : item)),
+      project?.hidden ? "Trabalho visível de novo." : "Trabalho oculto no site.",
+    );
   }
 
   function move(index: number, direction: -1 | 1) {
@@ -169,16 +192,18 @@ function Editor() {
     if (target < 0 || target >= next.length) return;
     const [item] = next.splice(index, 1);
     next.splice(target, 0, item);
-    update(next);
+    void commit(next, "Ordem atualizada no site.");
   }
 
   return (
     <main className="mx-auto max-w-6xl px-5 py-12">
       <h1 className="font-serif text-5xl tracking-tight sm:text-6xl">Editar portfólio</h1>
       <p className="mt-4 max-w-xl leading-relaxed text-pretty text-mute">
-        Adicione, reordene ou oculte trabalhos sem mexer em código. O que estiver oculto sai da página inicial.
+        O que você publicar entra no site público, em qualquer aparelho. Ocultar tira o trabalho da página inicial.
       </p>
-
+      {ready ? null : <p className="mt-10 text-sm text-mute">Carregando trabalhos…</p>}
+      {ready ? (
+      <>
       <form onSubmit={save} className="mt-10 grid gap-8 border border-line bg-paper-2/40 p-5 sm:p-8 lg:grid-cols-12">
         <div className="grid gap-4 lg:col-span-7">
           <h2 className="font-serif text-2xl">{editing ? "Editar trabalho" : "Novo trabalho"}</h2>
@@ -287,8 +312,7 @@ function Editor() {
         <button
           type="button"
           onClick={() => {
-            update(seedProjects);
-            setNotice("Voltei para a seleção original.");
+            void commit(seedProjects, "Voltei para a seleção original.");
             setEditing(null);
             setDraft(emptyDraft);
           }}
@@ -333,6 +357,8 @@ function Editor() {
           </li>
         ))}
       </ul>
+      </>
+      ) : null}
     </main>
   );
 }

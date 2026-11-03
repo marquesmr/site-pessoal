@@ -9,15 +9,15 @@ const links = [
 
 export function SiteFrame({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-paper text-ink">
+    <div className="min-h-screen overflow-x-clip bg-paper text-ink">
       <header className="sticky top-0 z-30 border-b border-line bg-paper/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3.5">
+        <div className="mx-auto flex max-w-6xl flex-col gap-1 px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:py-3.5">
           <Link to="/" className="font-serif text-lg leading-none tracking-tight">
             Carlos Marques
           </Link>
-          <nav className="flex items-center gap-5 text-sm sm:gap-6">
+          <nav className="flex items-center gap-1 text-sm sm:gap-2">
             {links.map((item) => (
-              <a key={item.href} href={item.href} className="text-mute hover:text-ink">
+              <a key={item.href} href={item.href} className="inline-flex h-11 items-center px-2 text-mute hover:text-ink sm:px-3">
                 {item.label}
               </a>
             ))}

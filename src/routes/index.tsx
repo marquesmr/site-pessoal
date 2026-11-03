@@ -1,8 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteFrame } from "@/components/site-frame";
+import { listPublicProjects } from "@/lib/portfolio-api";
 import { useProjects } from "@/lib/portfolio";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({
+  loader: () => listPublicProjects(),
+  headers: () => ({ "Cache-Control": "private, no-store" }),
+  component: Home,
+});
 
 const principles = [
   {
@@ -23,7 +28,8 @@ const principles = [
 ];
 
 function Home() {
-  const { projects } = useProjects();
+  const initial = Route.useLoaderData();
+  const { projects } = useProjects({ initial });
   const visible = projects.filter((project) => !project.hidden);
 
   return (
@@ -31,13 +37,13 @@ function Home() {
       <main>
         <section className="mx-auto grid max-w-6xl items-end gap-10 px-5 pb-8 pt-10 lg:grid-cols-12 lg:pt-16">
           <div className="lg:col-span-7">
-            <div className="grid w-max max-w-full grid-cols-[min-content]">
-              <h1 className="font-serif text-6xl leading-[0.86] tracking-tight sm:text-7xl lg:text-8xl">
+            <div className="max-w-xl lg:grid lg:w-max lg:max-w-full lg:grid-cols-[min-content]">
+              <h1 className="font-serif text-5xl leading-[0.88] tracking-tight sm:text-7xl lg:text-8xl">
                 Carlos
                 <br />
                 Marques
               </h1>
-              <p className="mt-5 min-w-0 text-justify text-base leading-snug text-mute sm:mt-6 sm:text-lg">
+              <p className="mt-5 text-left text-base leading-relaxed text-mute sm:text-lg lg:mt-6 lg:text-justify lg:leading-snug">
                 Programador e designer gráfico. Trabalho entre a marca e a interface — identidades, sites e
                 produtos com uma linguagem própria: clara, tátil e contemporânea.
               </p>
@@ -91,7 +97,7 @@ function Home() {
                       <p className="mt-3 text-sm text-mute">
                         {project.discipline} · {project.year}
                       </p>
-                      <p className="mt-4 text-justify leading-relaxed">{project.summary}</p>
+                      <p className="mt-4 text-left leading-relaxed lg:text-justify">{project.summary}</p>
                       <p className="mt-4 text-sm text-mute">{project.role}</p>
                       {project.link ? (
                         <a
@@ -144,7 +150,7 @@ function Home() {
           </h2>
           <a
             href="mailto:contato@marquestecnologies.com?subject=Projeto%20com%20Carlos%20Marques"
-            className="mt-8 inline-block font-serif text-2xl text-oxide underline decoration-line underline-offset-8 hover:text-oxide-deep sm:text-4xl"
+            className="mt-8 block max-w-full font-serif text-2xl leading-snug text-oxide underline decoration-line underline-offset-8 [overflow-wrap:anywhere] hover:text-oxide-deep sm:text-4xl"
           >
             contato@marquestecnologies.com
           </a>

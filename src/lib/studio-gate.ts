@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 
 const COOKIE = "cm_studio";
 
-export const getStudioAccess = createServerFn({ method: "GET" }).handler(async () => {
+export const getStudioAccess = createServerFn({ method: "POST" }).handler(async () => {
   const { getCookie } = await import("@tanstack/react-start/server");
   const { studioToken } = await import("./studio-secret.server");
   return { open: getCookie(COOKIE) === studioToken() };
