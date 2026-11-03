@@ -97,7 +97,7 @@ function Home() {
                       <p className="mt-3 text-sm text-mute">
                         {project.discipline} · {project.year}
                       </p>
-                      <p className="mt-4 text-left leading-relaxed lg:text-justify">{project.summary}</p>
+                      <p className="mt-4 text-justify leading-relaxed hyphens-auto">{project.summary}</p>
                       <p className="mt-4 text-sm text-mute">{project.role}</p>
                       {project.link ? (
                         <a
