@@ -3,11 +3,16 @@ import { useState, type FormEvent, type ReactNode } from "react";
 import { SiteFrame } from "@/components/site-frame";
 import { listPublicProjects } from "@/lib/portfolio-api";
 import { useProjects, type Project } from "@/lib/portfolio";
+import { listHiddenSections } from "@/lib/sections-api";
+import { numberedSections } from "@/lib/site-sections";
 
 const EMAIL = "contato@marquestecnologies.com";
 
 export const Route = createFileRoute("/")({
-  loader: () => listPublicProjects(),
+  loader: async () => {
+    const [projects, hidden] = await Promise.all([listPublicProjects(), listHiddenSections()]);
+    return { projects, hidden };
+  },
   headers: () => ({ "Cache-Control": "private, no-store" }),
   component: Home,
 });
@@ -109,23 +114,25 @@ const budgets = ["Até R$ 5 mil", "R$ 5 mil a R$ 15 mil", "R$ 15 mil a R$ 30 mil
 const deadlines = ["Para ontem", "Em 1 a 3 meses", "Sem pressa"];
 
 function Home() {
-  const initial = Route.useLoaderData();
-  const { projects } = useProjects({ initial });
+  const data = Route.useLoaderData();
+  const { projects } = useProjects({ initial: data.projects });
   const visible = projects.filter((project) => !project.hidden);
   const featured = visible.slice(0, 4);
   const rest = visible.slice(4);
+  const sections = numberedSections(data.hidden);
+  const numberOf = (id: string) => sections.find((section) => section.id === id);
 
   return (
-    <SiteFrame>
+    <SiteFrame sections={sections}>
       <main>
         <Hero />
         <Marquee />
-        <Projects featured={featured} rest={rest} />
-        <Services />
-        <Packages />
-        <Method />
-        <Studio />
-        <Budget />
+        {numberOf("projetos") ? <Projects index={numberOf("projetos")!.index} featured={featured} rest={rest} /> : null}
+        {numberOf("servicos") ? <Services index={numberOf("servicos")!.index} /> : null}
+        {numberOf("pacotes") ? <Packages index={numberOf("pacotes")!.index} /> : null}
+        {numberOf("metodo") ? <Method index={numberOf("metodo")!.index} /> : null}
+        {numberOf("estudio") ? <Studio index={numberOf("estudio")!.index} /> : null}
+        {numberOf("orcamento") ? <Budget index={numberOf("orcamento")!.index} /> : null}
       </main>
     </SiteFrame>
   );
@@ -253,11 +260,11 @@ function SectionHead({
   );
 }
 
-function Projects({ featured, rest }: { featured: Project[]; rest: Project[] }) {
+function Projects({ index, featured, rest }: { index: string; featured: Project[]; rest: Project[] }) {
   return (
     <section id="projetos" className="mx-auto max-w-[1600px] scroll-mt-16 px-5 pt-16 md:px-10 md:pt-24">
       <SectionHead
-        index="01"
+        index={index}
         label="Portfólio"
         title={
           <>
@@ -313,11 +320,11 @@ function Projects({ featured, rest }: { featured: Project[]; rest: Project[] }) 
   );
 }
 
-function Services() {
+function Services({ index }: { index: string }) {
   return (
     <section id="servicos" className="mx-auto max-w-[1600px] scroll-mt-16 px-5 pt-16 md:px-10 md:pt-24">
       <SectionHead
-        index="02"
+        index={index}
         label="Serviços"
         title={
           <>
@@ -341,11 +348,11 @@ function Services() {
   );
 }
 
-function Packages() {
+function Packages({ index }: { index: string }) {
   return (
     <section id="pacotes" className="mx-auto max-w-[1600px] scroll-mt-16 px-5 pt-16 md:px-10 md:pt-24">
       <SectionHead
-        index="03"
+        index={index}
         label="Pacotes"
         title={
           <>
@@ -395,12 +402,12 @@ function Packages() {
   );
 }
 
-function Method() {
+function Method({ index }: { index: string }) {
   const [open, setOpen] = useState(steps[0].number);
   return (
     <section id="metodo" className="mx-auto max-w-[1600px] scroll-mt-16 px-5 pt-16 md:px-10 md:pt-24">
       <SectionHead
-        index="04"
+        index={index}
         label="Método"
         title={
           <>
@@ -459,11 +466,11 @@ function Method() {
   );
 }
 
-function Studio() {
+function Studio({ index }: { index: string }) {
   return (
     <section id="estudio" className="mx-auto max-w-[1600px] scroll-mt-16 px-5 pt-16 md:px-10 md:pt-24">
       <SectionHead
-        index="05"
+        index={index}
         label="Estúdio"
         title={
           <>
@@ -509,7 +516,7 @@ function Studio() {
 const fieldClass =
   "min-h-12 w-full border-b border-paper/25 bg-transparent py-3 text-paper placeholder:text-paper/35 focus:border-oxide focus:outline-none";
 
-function Budget() {
+function Budget({ index }: { index: string }) {
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -548,7 +555,7 @@ function Budget() {
       <div className="mx-auto grid max-w-[1600px] gap-12 md:grid-cols-12 md:gap-8">
         <div className="md:col-span-5">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-[11px] text-oxide">06</span>
+            <span className="font-mono text-[11px] text-oxide">{index}</span>
             <span className="font-mono text-[10px] tracking-[0.24em] text-paper/50 uppercase">Orçamento</span>
           </div>
           <h2 className="mt-5 font-sans text-[11vw] leading-[0.88] font-extrabold tracking-[-0.04em] uppercase md:text-[4vw]">

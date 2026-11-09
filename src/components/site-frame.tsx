@@ -3,16 +3,13 @@ import { useEffect, useState, type ReactNode } from "react";
 
 const EMAIL = "contato@marquestecnologies.com";
 
-const menu = [
-  { href: "/#projetos", label: "Projetos", index: "01" },
-  { href: "/#servicos", label: "Serviços", index: "02" },
-  { href: "/#pacotes", label: "Pacotes", index: "03" },
-  { href: "/#metodo", label: "Método", index: "04" },
-  { href: "/#estudio", label: "Estúdio", index: "05" },
-  { href: "/#orcamento", label: "Orçamento", index: "06" },
-];
-
-export function SiteFrame({ children }: { children: ReactNode }) {
+export function SiteFrame({
+  children,
+  sections,
+}: {
+  children: ReactNode;
+  sections: { href: string; label: string; index: string }[];
+}) {
   const [open, setOpen] = useState(false);
   const [time, setTime] = useState("");
 
@@ -94,7 +91,7 @@ export function SiteFrame({ children }: { children: ReactNode }) {
           </div>
           <nav className="flex-1 overflow-y-auto px-5 py-4 md:px-10 md:py-6">
             <ul>
-              {menu.map((item) => (
+              {sections.map((item) => (
                 <li key={item.href} className="border-b border-paper/10">
                   <a
                     href={item.href}
@@ -152,7 +149,7 @@ export function SiteFrame({ children }: { children: ReactNode }) {
             <div className="md:col-span-3">
               <p className="label">Navegação</p>
               <ul className="mt-3 grid grid-cols-2 gap-y-1.5 md:grid-cols-1">
-                {menu.map((item) => (
+                {sections.map((item) => (
                   <li key={item.href}>
                     <a href={item.href} className="text-sm transition-colors hover:text-oxide">
                       {item.label}

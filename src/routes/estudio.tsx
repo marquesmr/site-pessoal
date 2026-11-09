@@ -2,6 +2,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import { getStudioAccess, openStudio } from "@/lib/studio-gate";
 import { emptyDraft, seedProjects, useProjects, type Draft, type Project } from "@/lib/portfolio";
+import { listHiddenSections, saveHiddenSections } from "@/lib/sections-api";
+import { numberedSections, siteSections } from "@/lib/site-sections";
 
 export const Route = createFileRoute("/estudio")({
   head: () => ({
@@ -91,6 +93,67 @@ function Lock({ onOpen }: { onOpen: () => void }) {
         {error ? <p className="text-sm text-oxide">Senha incorreta.</p> : null}
       </form>
     </main>
+  );
+}
+
+function SiteParts() {
+  const [hidden, setHidden] = useState<string[] | null>(null);
+  const [notice, setNotice] = useState("");
+
+  useEffect(() => {
+    let live = true;
+    listHiddenSections()
+      .then((value) => {
+        if (live) setHidden(value);
+      })
+      .catch(() => {
+        if (live) setHidden([]);
+      });
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  async function toggle(id: string) {
+    if (!hidden) return;
+    const next = hidden.includes(id) ? hidden.filter((item) => item !== id) : [...hidden, id];
+    setHidden(next);
+    try {
+      const saved = await saveHiddenSections({ data: { hidden: next } });
+      setHidden(saved);
+      setNotice("Partes do site atualizadas.");
+    } catch {
+      setNotice("Não consegui atualizar agora. Tente de novo.");
+    }
+  }
+
+  const visible = numberedSections(hidden ?? []);
+
+  return (
+    <section className="mt-10 border border-line">
+      <div className="border-b border-line px-5 py-4">
+        <h2 className="font-serif text-2xl">Partes do site</h2>
+        <p className="mt-1 text-sm text-mute">Ocultar tira a parte da página e renumera as que ficam.</p>
+      </div>
+      <ul>
+        {siteSections.map((section) => {
+          const shown = visible.find((item) => item.id === section.id);
+          return (
+            <li key={section.id} className="flex items-center justify-between gap-4 border-b border-line px-5 py-4 last:border-b-0">
+              <p className="font-sans text-lg">
+                <span className="mr-3 font-mono text-sm text-oxide">{shown ? shown.index : "—"}</span>
+                {section.label}
+                {shown ? null : <span className="text-mute"> · oculta</span>}
+              </p>
+              <button type="button" onClick={() => void toggle(section.id)} disabled={!hidden} className={ghost}>
+                {shown ? "Ocultar" : "Mostrar"}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+      {notice ? <p className="px-5 py-3 text-sm text-oxide-deep">{notice}</p> : null}
+    </section>
   );
 }
 
@@ -201,6 +264,7 @@ function Editor() {
       <p className="mt-4 max-w-xl leading-relaxed text-pretty text-mute">
         O que você publicar entra no site público, em qualquer aparelho. Ocultar tira o trabalho da página inicial.
       </p>
+      <SiteParts />
       {ready ? null : <p className="mt-10 text-sm text-mute">Carregando trabalhos…</p>}
       {ready ? (
       <>
