@@ -193,10 +193,7 @@ function Hero() {
             className="h-full w-full object-cover"
           />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-ink/70 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-4 md:p-6">
-            <span className="font-mono text-[10px] tracking-[0.24em] text-white/90 uppercase">
-              FIG. 01 — Interface / sistema de design
-            </span>
+          <div className="absolute inset-x-0 bottom-0 flex justify-end p-4 md:p-6">
             <span className="hidden font-mono text-[10px] tracking-[0.24em] text-white/70 uppercase sm:block">
               Mário Campos
             </span>
