@@ -188,8 +188,8 @@ function Hero() {
       <div className="mx-auto max-w-[1600px] px-5 md:px-10">
         <div className="relative h-[38vh] overflow-hidden border border-line md:h-[58vh]">
           <img
-            src="/work/sistema.jpg"
-            alt="Tela de um sistema de interface, com grade e blocos laranja"
+            src="/work/mesa-noite.jpg"
+            alt="Mesa de trabalho à noite, com notebook, caderno e lápis laranja"
             className="h-full w-full object-cover"
           />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-ink/70 to-transparent" />
