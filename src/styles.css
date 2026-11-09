@@ -1,30 +1,35 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --color-paper: #f3efe6;
-  --color-paper-2: #e6dfd2;
-  --color-ink: #16130e;
-  --color-mute: #6d665c;
-  --color-line: #d6cec0;
-  --color-oxide: #c24d1d;
-  --color-oxide-deep: #8c3410;
+  --color-paper: #ebebeb;
+  --color-paper-2: #dcdcdc;
+  --color-ink: #121212;
+  --color-mute: #4a4a4a;
+  --color-line: #12121226;
+  --color-oxide: #ff5c00;
+  --color-oxide-deep: #d44c00;
 
   --radius-none: 0px;
 }
 
 @layer base {
   html {
+    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
     background: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.6;
   }
 
   button:not(:disabled),
@@ -33,12 +38,60 @@
   }
 
   ::selection {
-    background: var(--color-oxide);
-    color: var(--color-paper);
+    background: #ff5c00;
+    color: #fff;
   }
 }
 
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-mute);
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.marquee-track {
+  animation: 42s linear infinite marquee;
+}
+
+.rise {
+  animation: 0.9s cubic-bezier(0.16, 1, 0.3, 1) both rise;
+}
+
+.rise-2 {
+  animation: 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both rise;
+}
+
+.rise-3 {
+  animation: 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both rise;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   *,
   *::before,
   *::after {
