@@ -31,12 +31,12 @@ const facts = [
 ];
 
 const services = [
-  { name: "Identidade visual", desc: "Logo, sistema tipográfico, paleta, papelaria e manual de marca.", price: "R$ 4.500" },
-  { name: "Landing page", desc: "Uma página, um objetivo: narrativa, conversão e performance.", price: "R$ 2.900" },
-  { name: "E-commerce", desc: "Loja própria com catálogo, checkout e operação integrada.", price: "R$ 12.900" },
-  { name: "Design editorial", desc: "Catálogos, revistas digitais e materiais impressos.", price: "R$ 3.200" },
-  { name: "Manutenção mensal", desc: "Evolução contínua, backups, monitoramento e ajustes finos.", price: "R$ 890/mês" },
-  { name: "Social kit", desc: "Templates de posts e stories alinhados à marca.", price: "R$ 1.800" },
+  { name: "Identidade visual", desc: "Logo, sistema tipográfico, paleta, papelaria e manual de marca." },
+  { name: "Landing page", desc: "Uma página, um objetivo: narrativa, conversão e performance." },
+  { name: "E-commerce", desc: "Loja própria com catálogo, checkout e operação integrada." },
+  { name: "Design editorial", desc: "Catálogos, revistas digitais e materiais impressos." },
+  { name: "Manutenção mensal", desc: "Evolução contínua, backups, monitoramento e ajustes finos." },
+  { name: "Social kit", desc: "Templates de posts e stories alinhados à marca." },
 ];
 
 const packages = [
@@ -264,7 +264,6 @@ function Projects({ featured, rest }: { featured: Project[]; rest: Project[] }) 
             Arquivo <span className="font-serif font-normal normal-case italic">vivo</span>
           </>
         }
-        note="Trabalhos recentes. O que entra aqui é publicado no estúdio e aparece para todo mundo."
       />
       <div className="grid gap-12 pt-10 md:grid-cols-2 md:gap-x-10 md:gap-y-16">
         {featured.map((project, index) => (
@@ -286,7 +285,7 @@ function Projects({ featured, rest }: { featured: Project[]; rest: Project[] }) 
                 {project.discipline} · {project.year}
               </span>
             </div>
-            <p className="mt-2 max-w-md text-justify hyphens-auto text-mute">{project.summary}</p>
+            <p className="mt-2 text-justify hyphens-auto text-mute">{project.summary}</p>
             {project.link ? (
               <a href={project.link} target="_blank" rel="noreferrer" className="mt-3 inline-flex text-sm hover:text-oxide">
                 Abrir projeto ↗
@@ -325,7 +324,6 @@ function Services() {
             Peças <span className="font-serif font-normal normal-case italic">sob medida</span>
           </>
         }
-        note="Contrate o que falta. Cada item inclui direção de arte, entrega organizada e arquivos abertos."
       />
       <div>
         {services.map((item, index) => (
@@ -335,8 +333,7 @@ function Services() {
           >
             <span className="label md:col-span-1">{String(index + 1).padStart(2, "0")}</span>
             <h3 className="font-sans text-2xl font-semibold tracking-[-0.02em] md:col-span-4 md:text-3xl">{item.name}</h3>
-            <p className="text-mute md:col-span-5">{item.desc}</p>
-            <span className="font-mono text-sm md:col-span-2 md:text-right">{item.price}</span>
+            <p className="text-mute md:col-span-7">{item.desc}</p>
           </div>
         ))}
       </div>
@@ -486,12 +483,12 @@ function Studio() {
           </p>
           <div className="mt-8 grid gap-px border border-line bg-ink/15 sm:grid-cols-2">
             <div className="bg-paper px-5 py-5">
-              <p className="label">Design + desenvolvimento</p>
-              <p className="mt-2 text-sm text-mute">Marca, interface e código sob o mesmo teto.</p>
+              <p className="font-mono text-[13px] tracking-[0.16em] text-mute uppercase">Design + desenvolvimento</p>
+              <p className="mt-2 text-base text-mute">Marca, interface e código sob o mesmo teto.</p>
             </div>
             <div className="bg-paper px-5 py-5">
-              <p className="label">Entrega em 4 a 8 semanas</p>
-              <p className="mt-2 text-sm text-mute">Cronograma com datas de aprovação definidas na semana 1.</p>
+              <p className="font-mono text-[13px] tracking-[0.16em] text-mute uppercase">Entrega em 4 a 8 semanas</p>
+              <p className="mt-2 text-base text-mute">Cronograma com datas de aprovação definidas na semana 1.</p>
             </div>
           </div>
         </div>

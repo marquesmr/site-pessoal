@@ -169,8 +169,8 @@ export function SiteFrame({ children }: { children: ReactNode }) {
               <p className="mt-4 text-xs text-mute">Mário Campos, MG</p>
             </div>
           </div>
-          <div className="mt-12 overflow-hidden border-t border-line pt-6">
-            <p className="font-sans text-[16vw] leading-[0.78] font-extrabold tracking-[-0.05em] uppercase select-none md:text-[14vw]">
+          <div className="mt-12 border-t border-line pt-6">
+            <p className="font-sans text-[11vw] leading-[0.85] font-extrabold tracking-[-0.05em] uppercase select-none md:text-[7.5vw]">
               Marques
               <span className="text-oxide">®</span>
             </p>
