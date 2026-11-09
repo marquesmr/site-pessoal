@@ -174,7 +174,7 @@ export function SiteFrame({
           </div>
           <div className="mt-6 flex flex-col gap-2 border-t border-line pt-5 font-mono text-[10px] tracking-[0.2em] text-mute uppercase md:flex-row md:items-center md:justify-between">
             <span>© {new Date().getFullYear()} Carlos Marques</span>
-            <span>Feito no estúdio · Mário Campos</span>
+            <span>Mário Campos</span>
           </div>
         </div>
       </footer>
